@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Побег из лабиринта</title>
+    <style>
+        canvas {
+            border: 2px solid white;
+            display: block;
+            margin: auto;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mazeCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("mazeCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const maze = [
+            "#########",
+            "#       #",
+            "# ####  #",
+            "#   #   #",
+            "##### ###",
+            "#       #",
+            "#########"
+        ];
+
+        const tileSize = 50;
+        let player = { x: 1, y: 1 };
+
+        function drawMaze() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let y = 0; y < maze.length; y++) {
+                for (let x = 0; x < maze[y].length; x++) {
+                    if (maze[y][x] === "#") {
+                        ctx.fillStyle = "gray";
+                        ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                    }
+                }
+            }
+
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.x * tileSize, player.y * tileSize, tileSize, tileSize);
+        }
+
+        document.addEventListener("keydown", (e) => {
+            let newX = player.x;
+            let newY = player.y;
+
+            if (e.key === "ArrowUp") newY--;
+            if (e.key === "ArrowDown") newY++;
+            if (e.key === "ArrowLeft") newX--;
+            if (e.key === "ArrowRight") newX++;
+
+            if (maze[newY][newX] === " ") {
+                player.x = newX;
+                player.y = newY;
+            }
+        });
+
+        function gameLoop() {
+            drawMaze();
+        }
+
+        setInterval(gameLoop, 100);
+    </script>
+</body>
+</html>
